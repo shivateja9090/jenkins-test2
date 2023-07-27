@@ -1,0 +1,23 @@
+<form [formGroup]="form" class="container" (submit)="onSubmit()">
+  <p class="display-6">Personal Information</p>
+  <div class="row">
+    <div class="col">
+      <app-required-field formControlName="firstName" placeholder="First name">
+      </app-required-field>
+    </div>
+    <div class="col">
+      <app-required-field formControlName="lastName" placeholder="Last name">
+      </app-required-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <app-required-select
+        formControlName="gender"
+        placeholder="Select gender..."
+        [options]="genderOptions"
+      ></app-required-select>
+    </div>
+  </div>
+  <button type="submit" class="btn btn-primary" [disabled]="!form.valid">Submit</button>
+</form>
