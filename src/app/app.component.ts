@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-
+import { EnvServiceProvider } from './env.service.provider';
+import { EnvService } from './env.service';
 /**
  * https://javascript.plainenglish.io/the-new-features-of-angular-v14-851995870f59
  *
@@ -13,6 +14,15 @@ import { RouterModule } from '@angular/router';
   selector: 'app-root',
   standalone: true,
   imports: [CommonModule, RouterModule],
+  providers: [EnvServiceProvider],
   templateUrl: './app.component.html',
 })
-export class AppComponent {}
+export class AppComponent {
+  constructor(private EnvService:EnvService){
+
+  }
+  title:any;
+  ngOnInit(){
+   this.title=this.EnvService.testName;
+  }
+}
