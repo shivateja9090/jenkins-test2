@@ -1,5 +1,6 @@
 FROM    node:14
 WORKDIR /app/front
+COPY    package.json
 COPY    . .       
 RUN     npm install 
 RUN     npm install -g @angular/cli
