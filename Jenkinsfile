@@ -1,12 +1,12 @@
 pipeline {
     agent {
-                label 'main'
+                label 'dev'
     }
     stages {
         stage('LABEL SET TO DEV') {  
             steps {
                 echo 'Building' 
-                sh "docker build -t jenkinstest-dev --build-arg ENVIRONMENT=demo ."
+                sh "docker build -t jenkinstest-dev --build-arg ENVIRONMENT=prod ."
             }
         }
         stage('Run on Dev') {
@@ -30,7 +30,7 @@ pipeline {
             }
             steps {
                 echo 'Building'
-                sh "sudo docker build -t jenkinstest-prod --build-arg ENVIRONMENT=prod ."
+                sh "sudo docker build -t jenkinstest-prod --build-arg ENVIRONMENT=dev ."
             }
         }
         stage('Run on Prod') {
