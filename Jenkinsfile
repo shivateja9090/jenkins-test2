@@ -9,7 +9,7 @@ pipeline {
                 sh "docker build -t jenkinstest --build-arg ENVIRONMENT=dev ."
             }
         }
-        stage('Run') {
+        stage('Run') { 
             steps {
                 echo 'Running'
                 // Check if the container 'jenkinstest' is already running
