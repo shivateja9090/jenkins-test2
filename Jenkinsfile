@@ -1,9 +1,9 @@
 pipeline {
+    agent {
+                label 'dev'
+    }
     stages {
         stage('LABEL SET TO DEV') { 
-            agent {
-                label 'dev'
-            }
             steps {
                 echo 'Building'
                 sh "docker build -t jenkinstest-dev --build-arg ENVIRONMENT=dev ."
