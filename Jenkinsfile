@@ -34,6 +34,9 @@ pipeline {
             }
         }
         stage('Run on Prod') {
+            agent {
+                label 'main'
+            }
             steps {
                 echo 'Running on Prod'
                 script {
