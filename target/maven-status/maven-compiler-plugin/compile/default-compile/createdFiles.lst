@@ -1,0 +1,7 @@
+com/ensat/services/ProductService.class
+com/ensat/controllers/ProductController.class
+com/ensat/SpringBootWebApplication.class
+com/ensat/services/ProductServiceImpl.class
+com/ensat/entities/Product.class
+com/ensat/controllers/IndexController.class
+com/ensat/repositories/ProductRepository.class
