@@ -30,7 +30,7 @@ pipeline {
             }
             steps {
                 echo 'Building'
-                sh "sudo docker build -t jenkinstest-prod --build-arg ENVIRONMENT=dev ."
+                sh "docker build -t jenkinstest-prod --build-arg ENVIRONMENT=dev ."
             }
         }
         stage('Run on Prod') {
@@ -44,7 +44,7 @@ pipeline {
                         sh "docker rm ${existingContainerId}"
                         sh "docker rmi ${imageId}"
                     }
-                    sh "sudo docker run -d -p 4200:4200 --name jenkinstest jenkinstest-prod"
+                    sh "docker run -d -p 4200:4200 --name jenkinstest jenkinstest-prod"
                 }
             }
         }
