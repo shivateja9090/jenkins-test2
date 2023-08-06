@@ -1,29 +1,35 @@
 pipeline {
-    agent any
-
+    agent {
+        label 'dev'
+    }   
     stages {
-        stage('First Stage') {
+        stage('Build') {
             steps {
-                echo 'Hello, this is the first stage!'
+                echo 'Building'
+                sh "docker build -t jenkinstest --build-arg ENVIRONMENT=dev ."
             }
         }
-
-        stage('Second Stage') {
+    stage('Run') {
             steps {
-                echo 'Hello, this is the second stage!'
+                echo 'Running'
+                script {
+                    // Check if the container 'jenkinstest' is already running
+                    def existingContainerId = sh(script: 'docker ps -q -f name=jenkinstest', returnStdout: true).trim()
+                    if (existingContainerId) {
+                        // Get the Image ID of the existing container
+                        def imageId = sh(script: "docker inspect -f '{{.Image}}' ${existingContainerId}", returnStdout: true).trim()
+
+                        // Stop and remove the existing container
+                        sh "docker stop ${existingContainerId}"
+                        sh "docker rm ${existingContainerId}"
+
+                        // Remove the related image
+                        sh "docker rmi ${imageId}"
+                    }
+
+                    // Start a new container
+                    sh 'docker run -d -p 4200:4200 --name jenkinstest jenkinstest'
+                }
             }
         }
     }
-
-    post {
-        always {
-            echo 'This will always be executed after all stages'
-        }
-        success {
-            echo 'This will be executed if the build is successful'
-        }
-        failure {
-            echo 'This will be executed if the build fails'
-        }
-    }
-}
