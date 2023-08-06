@@ -3,7 +3,7 @@ pipeline {
         label 'dev'
     }   
     stages {
-        stage('Build') {
+        stage('Build') { 
             steps {
                 echo 'Building'
                 sh "docker build -t jenkinstest --build-arg ENVIRONMENT=dev ."
