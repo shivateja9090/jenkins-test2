@@ -1,31 +1,50 @@
 pipeline {
-    agent {
-        label 'dev'
-    }   
     stages {
-        stage('Build') { 
+        stage('LABEL SET TO DEV') { 
+            agent {
+                label 'dev'
+            }
             steps {
                 echo 'Building'
-                sh "docker build -t jenkinstest --build-arg ENVIRONMENT=dev ."
+                sh "docker build -t jenkinstest-dev --build-arg ENVIRONMENT=dev ."
             }
         }
-        stage('Run') {
+        stage('Run on Dev') {
             steps {
-                echo 'Running'
+                echo 'Running on Dev'
                 script {
-                    // Check if the container 'jenkinstest' is already running
                     def existingContainerId = sh(script: 'docker ps -q -f name=jenkinstest', returnStdout: true).trim()
                     if (existingContainerId) {
-                        // Get the Image ID of the existing container
                         def imageId = sh(script: "docker inspect -f '{{.Image}}' ${existingContainerId}", returnStdout: true).trim()
-                        // Stop and remove the existing container
                         sh "docker stop ${existingContainerId}"
                         sh "docker rm ${existingContainerId}"
-                        // Remove the related image
                         sh "docker rmi ${imageId}"
                     }
-                    // Start a new container
-                    sh 'docker run -d -p 4200:4200 --name jenkinstest jenkinstest'
+                    sh "docker run -d -p 4200:4200 --name jenkinstest jenkinstest-dev"
+                }
+            }
+        }
+        stage('NOW LABEL SET TO PROD') { 
+            agent {
+                label 'main'
+            }
+            steps {
+                echo 'Building'
+                sh "docker build -t jenkinstest-prod --build-arg ENVIRONMENT=prod ."
+            }
+        }
+        stage('Run on Prod') {
+            steps {
+                echo 'Running on Prod'
+                script {
+                    def existingContainerId = sh(script: 'docker ps -q -f name=jenkinstest', returnStdout: true).trim()
+                    if (existingContainerId) {
+                        def imageId = sh(script: "docker inspect -f '{{.Image}}' ${existingContainerId}", returnStdout: true).trim()
+                        sh "docker stop ${existingContainerId}"
+                        sh "docker rm ${existingContainerId}"
+                        sh "docker rmi ${imageId}"
+                    }
+                    sh "docker run -d -p 4200:4200 --name jenkinstest jenkinstest-prod"
                 }
             }
         }
